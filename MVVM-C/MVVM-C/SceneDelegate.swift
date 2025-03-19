@@ -12,10 +12,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
 
+    // 4. SceneDelegate 설정
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
+
+        let navigationController = UINavigationController()
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = ViewController()
+        window?.rootViewController = navigationController
+
+        let appCoordinator = AppCoordinator(navigationController: navigationController)
+        appCoordinator.start()
+
         window?.makeKeyAndVisible()
     }
 
