@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol YCoordinatorProtocol: AnyObject {
+    func showNextScreenFromD()
+    func goBackToD()
+}
