@@ -10,6 +10,17 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    /*
+
+     A -> B -> C : XCoordinator
+     D -> B      : YCoordinator
+     E -> F      : ZCoordinator
+
+     BViewController: BViewControllerDelegate
+
+     A -> B -> C -> E -> F: XCoordinator -> ZCoordinator
+
+     */
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

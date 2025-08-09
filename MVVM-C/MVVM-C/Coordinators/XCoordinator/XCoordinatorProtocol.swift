@@ -10,6 +10,7 @@ import Foundation
 protocol XCoordinatorProtocol: AnyObject {
     func showNextScreenFromA()
     func showCScreenFromB()
+    func showEScreenFromC()
     func goBackToA()
     func goBackToB()
 }

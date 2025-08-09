@@ -1,5 +1,5 @@
 //
-//  CViewController.swift
+//  FViewController.swift
 //  MVVM-C
 //
 //  Created by 김태형 on 8/9/25.
@@ -10,38 +10,39 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-final class CViewController: UIViewController {
-    weak var coordinator: XCoordinatorProtocol?
-    private let viewModel: CViewModel
+final class FViewController: UIViewController {
+    weak var coordinator: ZCoordinatorProtocol?
+    private let viewModel: FViewModel
     private let disposeBag = DisposeBag()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
-    private let nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = .systemTeal
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .systemIndigo
+        button.backgroundColor = .systemCyan
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    init(viewModel: CViewModel) {
+    private let closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .systemRed
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    init(viewModel: FViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -60,22 +61,22 @@ final class CViewController: UIViewController {
         view.backgroundColor = .systemBackground
 
         view.addSubview(titleLabel)
-        view.addSubview(nextButton)
         view.addSubview(backButton)
+        view.addSubview(closeButton)
 
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -80),
 
-            nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nextButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            nextButton.widthAnchor.constraint(equalToConstant: 220),
-            nextButton.heightAnchor.constraint(equalToConstant: 44),
-
             backButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            backButton.topAnchor.constraint(equalTo: nextButton.bottomAnchor, constant: 20),
-            backButton.widthAnchor.constraint(equalToConstant: 220),
-            backButton.heightAnchor.constraint(equalToConstant: 44)
+            backButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            backButton.widthAnchor.constraint(equalToConstant: 200),
+            backButton.heightAnchor.constraint(equalToConstant: 44),
+
+            closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            closeButton.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 20),
+            closeButton.widthAnchor.constraint(equalToConstant: 200),
+            closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
 
@@ -85,33 +86,33 @@ final class CViewController: UIViewController {
             .bind(to: titleLabel.rx.text)
             .disposed(by: disposeBag)
 
-        viewModel.nextButtonTitle
-            .bind(to: nextButton.rx.title(for: .normal))
-            .disposed(by: disposeBag)
-
         viewModel.backButtonTitle
             .bind(to: backButton.rx.title(for: .normal))
             .disposed(by: disposeBag)
 
-        // Bind UI to ViewModel
-        nextButton.rx.tap
-            .bind(to: viewModel.nextButtonTap)
+        viewModel.closeButtonTitle
+            .bind(to: closeButton.rx.title(for: .normal))
             .disposed(by: disposeBag)
 
+        // Bind UI to ViewModel
         backButton.rx.tap
             .bind(to: viewModel.backButtonTap)
             .disposed(by: disposeBag)
 
+        closeButton.rx.tap
+            .bind(to: viewModel.closeButtonTap)
+            .disposed(by: disposeBag)
+
         // Handle navigation
-        nextButton.rx.tap
+        backButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                self?.coordinator?.showEScreenFromC() // 새로운 흐름으로 전환
+                self?.coordinator?.goBackToE()
             })
             .disposed(by: disposeBag)
 
-        backButton.rx.tap
+        closeButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                self?.coordinator?.goBackToB()
+                self?.coordinator?.dismissZFlow()
             })
             .disposed(by: disposeBag)
     }

@@ -41,6 +41,26 @@ final class XCoordinator: Coordinator, XCoordinatorProtocol, BViewControllerDele
         navigationController.pushViewController(viewController, animated: true)
     }
 
+    func showEScreenFromC() {
+        let newNavController = UINavigationController()
+        let zCoordinator = ZCoordinator(navigationController: newNavController)
+        zCoordinator.parentCoordinator = self // 부모 코디네이터 참조 저장
+        childCoordinators.append(zCoordinator)
+        zCoordinator.start()
+
+        navigationController.present(newNavController, animated: true)
+    }
+
+    // ZCoordinator에서 돌아올 때 호출
+    func childDidFinish(_ child: Coordinator) {
+        for (index, coordinator) in childCoordinators.enumerated() {
+            if coordinator === child {
+                childCoordinators.remove(at: index)
+                break
+            }
+        }
+    }
+
     func goBackToA() {
         navigationController.popViewController(animated: true)
     }
