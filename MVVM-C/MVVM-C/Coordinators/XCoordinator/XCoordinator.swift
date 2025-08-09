@@ -45,6 +45,7 @@ final class XCoordinator: Coordinator, XCoordinatorProtocol, BViewControllerDele
         navigationController.popViewController(animated: true)
     }
 
+    // MARK: XCoordinator에서 이동하는 메서드 (CViewController에서 사용됨)
     func goBackToB() {
         navigationController.popViewController(animated: true)
     }
