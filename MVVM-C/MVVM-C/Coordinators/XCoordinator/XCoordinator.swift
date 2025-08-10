@@ -20,8 +20,7 @@ final class XCoordinator: Coordinator, XCoordinatorProtocol, BViewControllerDele
     }
 
     private func showAViewController() {
-        let viewModel = AViewModel()
-        let viewController = AViewController(viewModel: viewModel)
+        let viewController = DIContainer.shared.container.resolve(AViewController.self)!
         viewController.coordinator = self
         navigationController.pushViewController(viewController, animated: false)
     }
