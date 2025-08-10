@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		16C8A72A2E47002900F18A07 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 16C8A7292E47002900F18A07 /* RxCocoa */; };
 		16C8A72C2E47002900F18A07 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 16C8A72B2E47002900F18A07 /* RxSwift */; };
+		16C8A8EB2E48E63200F18A07 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 16C8A8EA2E48E63200F18A07 /* Swinject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			files = (
 				16C8A72C2E47002900F18A07 /* RxSwift in Frameworks */,
 				16C8A72A2E47002900F18A07 /* RxCocoa in Frameworks */,
+				16C8A8EB2E48E63200F18A07 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				16C8A7292E47002900F18A07 /* RxCocoa */,
 				16C8A72B2E47002900F18A07 /* RxSwift */,
+				16C8A8EA2E48E63200F18A07 /* Swinject */,
 			);
 			productName = "MVVM-C";
 			productReference = 16B970DE2D8AD90A0014C849 /* MVVM-C.app */;
@@ -118,6 +121,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				16C8A7282E47002900F18A07 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				16C8A8E92E48E63200F18A07 /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 16B970DF2D8AD90A0014C849 /* Products */;
@@ -367,6 +371,14 @@
 				minimumVersion = 6.9.0;
 			};
 		};
+		16C8A8E92E48E63200F18A07 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -379,6 +391,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 16C8A7282E47002900F18A07 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		16C8A8EA2E48E63200F18A07 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16C8A8E92E48E63200F18A07 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
