@@ -53,7 +53,7 @@ final class BViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupBindings()
+        bind()
     }
 
     private func setupUI() {
@@ -79,40 +79,39 @@ final class BViewController: UIViewController {
         ])
     }
 
-    private func setupBindings() {
-        // Bind ViewModel to UI
-        viewModel.title
-            .bind(to: titleLabel.rx.text)
+    private func bind() {
+        let input = BViewModel.Input(
+            nextButtonTap: nextButton.rx.tap.asObservable(),
+            backButtonTap: backButton.rx.tap.asObservable()
+        )
+
+        let output = viewModel.transform(input: input)
+
+        output.title
+            .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
 
-        viewModel.nextButtonTitle
-            .bind(to: nextButton.rx.title(for: .normal))
+        output.nextButtonTitle
+            .drive(nextButton.rx.title(for: .normal))
             .disposed(by: disposeBag)
 
-        viewModel.backButtonTitle
-            .bind(to: backButton.rx.title(for: .normal))
+        output.backButtonTitle
+            .drive(backButton.rx.title(for: .normal))
             .disposed(by: disposeBag)
 
-        // Bind UI to ViewModel
-        nextButton.rx.tap
-            .bind(to: viewModel.nextButtonTap)
-            .disposed(by: disposeBag)
-
-        backButton.rx.tap
-            .bind(to: viewModel.backButtonTap)
-            .disposed(by: disposeBag)
-
-        // Handle navigation
-        nextButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.delegate?.showCScreenFromB()
+        output.navigationCommand
+            .drive(onNext: { [weak self] command in
+                self?.executeNavigation(command: command)
             })
             .disposed(by: disposeBag)
+    }
 
-        backButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.delegate?.goBackFromB()
-            })
-            .disposed(by: disposeBag)
+    private func executeNavigation(command: BViewModel.NavigationCommand) {
+        switch command {
+        case .showCScreen:
+            delegate?.showCScreenFromB()
+        case .goBack:
+            delegate?.goBackFromB()
+        }
     }
 }

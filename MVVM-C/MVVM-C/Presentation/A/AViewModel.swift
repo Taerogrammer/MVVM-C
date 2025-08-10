@@ -11,18 +11,39 @@ import RxSwift
 final class AViewModel {
     private let disposeBag = DisposeBag()
 
-    // Input
-    let nextButtonTap = PublishSubject<Void>()
-
-    // Output
-    let title = BehaviorRelay<String>(value: "A View Controller")
-    let buttonTitle = BehaviorRelay<String>(value: "Go to Next Screen")
-
-    init() {
-        setupBindings()
+    enum NavigationCommand {
+        case showNextScreen
+        case goBack
     }
 
-    private func setupBindings() {
-        // Additional business logic can be added here
+    struct Input {
+        let nextButtonTap: Observable<Void>
+    }
+
+    struct Output {
+        let title: Driver<String>
+        let buttonTitle: Driver<String>
+        let navigationCommand: Driver<NavigationCommand>
+    }
+
+    init() {}
+
+    func transform(input: Input) -> Output {
+        let navigationCommand = input.nextButtonTap
+            .do(onNext: {
+                print("Next button tapped in AViewModel - processing business logic")
+            })
+            .map { NavigationCommand.showNextScreen }
+            .asDriver(onErrorJustReturn: .goBack)
+
+        // Output 생성
+        let title = Driver.just("A View Controller")
+        let buttonTitle = Driver.just("Go to Next Screen")
+
+        return Output(
+            title: title,
+            buttonTitle: buttonTitle,
+            navigationCommand: navigationCommand
+        )
     }
 }

@@ -44,7 +44,7 @@ final class AViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupBindings()
+        bind()
     }
 
     private func setupUI() {
@@ -64,26 +64,35 @@ final class AViewController: UIViewController {
         ])
     }
 
-    private func setupBindings() {
-        // Bind ViewModel to UI
-        viewModel.title
-            .bind(to: titleLabel.rx.text)
+    private func bind() {
+        let input = AViewModel.Input(
+            nextButtonTap: nextButton.rx.tap.asObservable()
+        )
+
+        let output = viewModel.transform(input: input)
+
+        output.title
+            .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
 
-        viewModel.buttonTitle
-            .bind(to: nextButton.rx.title(for: .normal))
+        output.buttonTitle
+            .drive(nextButton.rx.title(for: .normal))
             .disposed(by: disposeBag)
 
-        // Bind UI to ViewModel
-        nextButton.rx.tap
-            .bind(to: viewModel.nextButtonTap)
-            .disposed(by: disposeBag)
-
-        // Handle navigation
-        nextButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.coordinator?.showNextScreenFromA()
+        // Navigation Command 처리
+        output.navigationCommand
+            .drive(onNext: { [weak self] command in
+                self?.executeNavigation(command: command)
             })
             .disposed(by: disposeBag)
+    }
+
+    private func executeNavigation(command: AViewModel.NavigationCommand) {
+        switch command {
+        case .showNextScreen:
+            coordinator?.showNextScreenFromA()
+        case .goBack:
+            coordinator?.goBackToA()
+        }
     }
 }
